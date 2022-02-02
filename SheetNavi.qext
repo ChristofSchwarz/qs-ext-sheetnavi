@@ -2,7 +2,7 @@
     "name": "/\\SheetNavigation",
     "description": "Sheet Navigation for Sense Client and single mode",
     "type": "visualization",
-    "version": "0.9.5",
+    "version": "1.0.0",
     "icon": "extension",
     "author": "Christof Schwarz",
     "homepage": "www.databridge.ch",

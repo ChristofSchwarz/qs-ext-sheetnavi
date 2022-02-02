@@ -69,7 +69,13 @@ define(['./functions'], function (functions) {
                 label: "If you turn this on, 3 variables will be updated with the list of sheets, "
                     + 'tags a matrix of the both: vViewSheetsDim, vViewTagsDim, vViewSheetTag',
                 component: "text"
-            }, subSection('Color Settings', [
+            }, {
+                label: 'Show Zurich Button',
+                type: 'boolean',
+                defaultValue: false,
+                ref: 'pShowZurichBtn'
+            }, 
+            subSection('Color Settings', [
                 {
                     label: "Menu Text Color",
                     component: "color-picker",
