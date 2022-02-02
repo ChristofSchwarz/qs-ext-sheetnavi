@@ -1,0 +1,134 @@
+/* CSS */
+
+/* from https://codepen.io/d2k/pen/jEmWXq/  */
+
+.center {
+  text-align: center;
+}
+
+.rotate180 {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
+.menushadow {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(0, 0, 0, 0);
+}
+
+nav.sheetnavi {
+  /* width: 90%; */
+  margin: 0 auto;
+  /* background-color: #ffffff;  */
+  /* box-shadow: 0px 3px 0px #dedede; */
+}
+
+.sheetnavi_h {
+  list-style: none;
+  text-align: center;
+}
+
+.sheetnavi_v {
+  list-style: none;
+  text-align: left;
+}
+
+.sheetnavi_h li {
+  display: inline-block;
+  list-style: none;
+}
+
+.sheetnavi_v li {
+  list-style: none;
+}
+
+nav.sheetnavi ul li a {
+  display: block;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-decoration: none;
+  /* font-weight: 800; */
+  /*text-transform: uppercase;*/
+  margin: 0 2px;
+}
+
+nav.sheetnavi ul li a:hover {
+  /* color: #555; */
+  cursor: pointer;
+}
+
+/* stroke */
+nav.sheetnavi-stroke ul li a,
+nav.fill ul li a {
+  position: relative;
+}
+nav.sheetnavi-stroke ul li a:after,
+nav.fill ul li a:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 0%;
+  content: ".";
+  color: transparent;
+  background: rgb(165, 36, 36);
+  height: 1px;
+}
+nav.sheetnavi-stroke ul li a:hover:after {
+  width: 100%;
+}
+
+.absoluteSubMenu {
+  z-index: 500;
+  display: none;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  font-family: "QlikView Sans";
+}
+
+.absoluteSubMenu ul {
+  margin-bottom: 6px;
+}
+
+.absoluteSubMenuEntry {
+  width: 100%;
+  padding-top: 5px;
+  text-overflow: ellipsis;
+}
+
+.spinningwheel {
+  height: 60px;
+  width: 60px;
+  margin: 0 auto;
+  background-image: url(../extensions/sheetnavi/pics/loader.svg);
+  background-size: 100% 100%;
+  animation-name: rotate;
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  transform: rotate(1turn);
+  -webkit-animation-name: rotate;
+  -webkit-animation-duration: 1.5s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -webkit-transform: rotate(1turn);
+}
+
+#prvSheetList {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+#prvSheetList tr:first-child {
+  border-bottom: 1px solid #bbb;
+}
+
+#gca_previewtitle {
+  font-weight: bold;
+}
+
+#gca_exportmode label,
+#gca_exportfor label {
+  margin-top: 5px;
+}

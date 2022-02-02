@@ -1,0 +1,63 @@
+<div id="gca_page1">
+    <div class="lui-text-default" style="font-weight: bold;">
+        Create export
+    </div>
+    <form id="gca_exportfor">
+        <label class="lui-radiobutton">
+            <input class="lui-radiobutton__input" type="radio" name="myradio" value="designtemplate" checked>
+            <div class="lui-radiobutton__radio-wrap">
+                <span class="lui-radiobutton__radio"></span>
+                <span class="lui-radiobutton__radio-text">as design template for all GCA apps (w/o data)</span>
+            </div>
+        </label>
+        <label class="lui-radiobutton">
+            <input class="lui-radiobutton__input" type="radio" name="myradio" value="onecustomer">
+            <div class="lui-radiobutton__radio-wrap">
+                <span class="lui-radiobutton__radio"></span>
+                <span class="lui-radiobutton__radio-text">for a specific customer</span>
+            </div>
+        </label>
+    </form>
+    <div id="section_forcustomer" style="display:none;">
+        <label class="lui-label">App for customer</label>
+        <input class="lui-input" id="gca_forcustomer" list="gca_datalist" />
+        <datalist id="gca_datalist"></datalist>
+    </div>
+</div>
+<div id="gca_page2" style="display:none;">
+    <div class="lui-text-default exportquest">
+        Confirm to export/copy this app for customer <b id="gca_forcustomer2"></b>
+        with the following <span id="gca_sheetcounter" style="font-weight: bold;"></span> sheets?
+    </div>
+    <div style="height:200px; overflow: auto;">
+        <table id="prvSheetList">
+            <tr>
+                <td><b>Sheet</b></td>
+                <td><b>tagged</b></td>
+            </tr>
+        </table>
+    </div>
+
+    <form id="gca_exportmode" style="display: none;">
+        <div class="lui-text-default" style="font-weight: bold;">
+            Export or copy?
+        </div>
+        <label class="lui-radiobutton">
+            <input class="lui-radiobutton__input" type="radio" name="myradio" value="copyReload" checked>
+            <div class="lui-radiobutton__radio-wrap">
+                <span class="lui-radiobutton__radio"></span>
+                <span class="lui-radiobutton__radio-text">Make copy and reload (optionally export)</span>
+            </div>
+        </label>
+        <label class="lui-radiobutton">
+            <input class="lui-radiobutton__input" type="radio" name="myradio" value="exportEmpty">
+            <div class="lui-radiobutton__radio-wrap">
+                <span class="lui-radiobutton__radio"></span>
+                <span class="lui-radiobutton__radio-text">Export emtpy app with design without data</span>
+            </div>
+        </label>
+    </form>
+</div>
+<hr />
+<div class="lui-text-default">The target app will be titled: </div>
+<div class="lui-text-default"><span id="gca_previewtitle">...</span></div>
