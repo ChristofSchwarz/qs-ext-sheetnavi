@@ -169,149 +169,149 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
                     }
                 }
 
-
-
-                // --- append button to Qlik Sense Client menu ---
                 $('.gca_extrabutton').remove();
-                $('.qs-toolbar__right').prepend(
-                    '<div class="qs-popover-container  qs-toolbar__element  gca_extrabutton">'
-                    + '<button id="' + ownId + 'menu" type="button" class="lui-button" title="GCA Export" style="background-color:#062C92;color:white;">'
-                    + '<span class="lui-icon lui-icon--export qs-no-margin" aria-hidden="true"></span>'
-                    + '</button></div>'
-                );
-                $('#' + ownId + 'menu').on('click', async function () {
 
-                    var menu = $.ajax({ type: "GET", url: "../extensions/sheetnavi/menu.html", async: false });
-                    menu = menu.responseText;
+                if (layout.pShowZurichBtn) {
+                    // --- append button to Qlik Sense Client menu ---
+                    $('.qs-toolbar__right').prepend(
+                        '<div class="qs-popover-container  qs-toolbar__element  gca_extrabutton">'
+                        + '<button id="' + ownId + 'menu" type="button" class="lui-button" title="GCA Export" style="background-color:#062C92;color:white;">'
+                        + '<span class="lui-icon lui-icon--export qs-no-margin" aria-hidden="true"></span>'
+                        + '</button></div>'
+                    );
+                    $('#' + ownId + 'menu').on('click', async function () {
 
-                    var ret = await functions.readSheetDescr(enigma, layout, app);
-                    console.log('readSheetDescr came back with', ret);
-                    sheetMatrix = ret.sheetMatrix;
-                    sheetList = ret.sheetList;
-                    tagList = ret.tagList;
-                    // menuEntries = ret.menuEntries;
-                    menuTree = ret.menuTree;
+                        var menu = $.ajax({ type: "GET", url: "../extensions/sheetnavi/menu.html", async: false });
+                        menu = menu.responseText;
 
-                    const xrfkey = ('' + Math.random()).replace('.', '').repeat(6).substr(0, 16);
-                    const qpsUserInfo = await $.getJSON(baseUrl + 'qps/user');
-                    const qrsUserInfos = await functions.qrsCall('GET', "/user/full?filter=userId eq '"
-                        + qpsUserInfo.userId + "' and userDirectory eq '" + qpsUserInfo.userDirectory + "'");
-                    const qmcRoles = qrsUserInfos[0].roles;
-                    if (qmcRoles.indexOf('RootAdmin') == 0 && qmcRoles.indexOf('ContentAdmin') == 0) {
-                        functions.leonardoMsg(ownId + 'dia', 'Insufficient Rights',
-                            'You requre "ContentAdmin" or "RootAdmin" rights to continue.',
-                            null, 'Cancel', true);
-                    } else {
-                        var exportMode = 'designtemplate';
-                        const appTitle = $("[data-tid=toolbar-app-title]").text();
+                        var ret = await functions.readSheetDescr(enigma, layout, app);
+                        console.log('readSheetDescr came back with', ret);
+                        sheetMatrix = ret.sheetMatrix;
+                        sheetList = ret.sheetList;
+                        tagList = ret.tagList;
+                        // menuEntries = ret.menuEntries;
+                        menuTree = ret.menuTree;
 
-                        functions.leonardoMsg(ownId + 'dia', 'Export/Copy App', menu,
-                            'Next <span class="lui-icon  lui-icon--small  lui-icon--arrow-right"></span>'
-                            , 'Cancel', null);
+                        const xrfkey = ('' + Math.random()).replace('.', '').repeat(6).substr(0, 16);
+                        const qpsUserInfo = await $.getJSON(baseUrl + 'qps/user');
+                        const qrsUserInfos = await functions.qrsCall('GET', "/user/full?filter=userId eq '"
+                            + qpsUserInfo.userId + "' and userDirectory eq '" + qpsUserInfo.userDirectory + "'");
+                        const qmcRoles = qrsUserInfos[0].roles;
+                        if (qmcRoles.indexOf('RootAdmin') == 0 && qmcRoles.indexOf('ContentAdmin') == 0) {
+                            functions.leonardoMsg(ownId + 'dia', 'Insufficient Rights',
+                                'You requre "ContentAdmin" or "RootAdmin" rights to continue.',
+                                null, 'Cancel', true);
+                        } else {
+                            var exportMode = 'designtemplate';
+                            const appTitle = $("[data-tid=toolbar-app-title]").text();
 
-                        $('#gca_previewtitle').text(functions.newAppTitle(appTitle, 'all'));
+                            functions.leonardoMsg(ownId + 'dia', 'Export/Copy App', menu,
+                                'Next <span class="lui-icon  lui-icon--small  lui-icon--arrow-right"></span>'
+                                , 'Cancel', null);
 
-                        $('#gca_exportfor input').on('change', function () {
-                            var title;
-                            exportMode = $('input[name=myradio]:checked', '#gca_exportfor').val();
-                            if (exportMode == 'onecustomer') {
-                                // export for one customer
-                                $('#section_forcustomer').show();
-                                title = functions.newAppTitle(appTitle, $('#gca_forcustomer').val());
-                            } else { // export as design template for all apps
-                                $('#section_forcustomer').hide();
-                                title = functions.newAppTitle(appTitle, 'all')
-                            }
-                            $('#gca_previewtitle').text(title);
-                            $('#msgok_' + ownId + 'dia').attr('disabled',
-                                $('#gca_forcustomer').val() == "" && exportMode == 'onecustomer'
-                            );
-                        });
+                            $('#gca_previewtitle').text(functions.newAppTitle(appTitle, 'all'));
 
-                        // preview app title on each change in the input field
-                        $('#gca_forcustomer').on('change', function () {
-                            $('#gca_previewtitle').text(
-                                functions.newAppTitle(appTitle, $('#gca_forcustomer').val())
-                            );
+                            $('#gca_exportfor input').on('change', function () {
+                                var title;
+                                exportMode = $('input[name=myradio]:checked', '#gca_exportfor').val();
+                                if (exportMode == 'onecustomer') {
+                                    // export for one customer
+                                    $('#section_forcustomer').show();
+                                    title = functions.newAppTitle(appTitle, $('#gca_forcustomer').val());
+                                } else { // export as design template for all apps
+                                    $('#section_forcustomer').hide();
+                                    title = functions.newAppTitle(appTitle, 'all')
+                                }
+                                $('#gca_previewtitle').text(title);
+                                $('#msgok_' + ownId + 'dia').attr('disabled',
+                                    $('#gca_forcustomer').val() == "" && exportMode == 'onecustomer'
+                                );
+                            });
 
-                            $('#msgok_' + ownId + 'dia').attr('disabled',
-                                $('#gca_forcustomer').val() == "" && exportMode == 'onecustomer'
-                            );
-                        });
-                        // add options to the list
-                        $('#gca_datalist').empty();
-                        tagList.forEach(function (tag) {
-                            if (tag != 'public')
-                                $('#gca_datalist').append('<option>' + tag + '</option>');
-                        });
-                        layout.pMoreCustomers.split(',').forEach(function (tag) {
-                            if (tag.trim() != '')
-                                $('#gca_datalist').append('<option>' + tag.trim() + '</option>');
-                        });
-                        // sort options 
-                        var options = $('#gca_datalist option');
-                        var arr = options.map(function (_, o) { return { t: $(o).text(), v: o.value }; }).get();
-                        arr.sort(function (o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
-                        options.each(function (i, o) {
-                            o.value = arr[i].v;
-                            $(o).text(arr[i].t);
-                        });
+                            // preview app title on each change in the input field
+                            $('#gca_forcustomer').on('change', function () {
+                                $('#gca_previewtitle').text(
+                                    functions.newAppTitle(appTitle, $('#gca_forcustomer').val())
+                                );
 
-                        // what to do when "Next>" is clicked
-                        $('#msgok_' + ownId + 'dia').on('click', async function () {
-                            // show next dialog
-                            const forCustomer = $('#gca_forcustomer').val();
-                            const newAppTitle = $('#gca_previewtitle').text();
-                            $('#gca_page1').hide();
-                            $('#gca_page2').show();
-                            if (exportMode == 'onecustomer') $('#gca_exportmode').show();
-                            $('#gca_forcustomer2').text(forCustomer);
-                            const thisApp = await functions.qrsCall('GET', '/app/' + qlik.currApp().id);
-                            const sheets = await functions.qrsCall('GET', "/app/object?filter=app.id eq "
-                                + qlik.currApp().id + " and objectType eq 'sheet'"
-                                + (thisApp.published ? " and published eq true" : ""));
-                            var keepSheetIds = [];
+                                $('#msgok_' + ownId + 'dia').attr('disabled',
+                                    $('#gca_forcustomer').val() == "" && exportMode == 'onecustomer'
+                                );
+                            });
+                            // add options to the list
+                            $('#gca_datalist').empty();
+                            tagList.forEach(function (tag) {
+                                if (tag != 'public')
+                                    $('#gca_datalist').append('<option>' + tag + '</option>');
+                            });
+                            layout.pMoreCustomers.split(',').forEach(function (tag) {
+                                if (tag.trim() != '')
+                                    $('#gca_datalist').append('<option>' + tag.trim() + '</option>');
+                            });
+                            // sort options 
+                            var options = $('#gca_datalist option');
+                            var arr = options.map(function (_, o) { return { t: $(o).text(), v: o.value }; }).get();
+                            arr.sort(function (o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+                            options.each(function (i, o) {
+                                o.value = arr[i].v;
+                                $(o).text(arr[i].t);
+                            });
+
+                            // what to do when "Next>" is clicked
+                            $('#msgok_' + ownId + 'dia').on('click', async function () {
+                                // show next dialog
+                                const forCustomer = $('#gca_forcustomer').val();
+                                const newAppTitle = $('#gca_previewtitle').text();
+                                $('#gca_page1').hide();
+                                $('#gca_page2').show();
+                                if (exportMode == 'onecustomer') $('#gca_exportmode').show();
+                                $('#gca_forcustomer2').text(forCustomer);
+                                const thisApp = await functions.qrsCall('GET', '/app/' + qlik.currApp().id);
+                                const sheets = await functions.qrsCall('GET', "/app/object?filter=app.id eq "
+                                    + qlik.currApp().id + " and objectType eq 'sheet'"
+                                    + (thisApp.published ? " and published eq true" : ""));
+                                var keepSheetIds = [];
 
 
-                            sheets.forEach(function (sheet) {
-                                const sheetUrl = baseUrl + 'sense/app/' + qlik.currApp().id + '/sheet/';
-                                const tableRow = '<tr><td><a href="' + sheetUrl + sheet.engineObjectId + '" target="_blank">'
-                                    + sheet.name + '</a></td>'
-                                    + '<td>{{§}}</td></tr>';
-                                if (sheet.description.indexOf('{public}') > -1) {
-                                    keepSheetIds.push(sheet.engineObjectId);
-                                    $('#prvSheetList').append(tableRow.replace('{§}', 'public'));
-                                } else if (exportMode == 'onecustomer' && sheet.description.indexOf('{' + forCustomer + '}') > -1) {
-                                    keepSheetIds.push(sheet.engineObjectId);
-                                    $('#prvSheetList').append(tableRow.replace('{§}', forCustomer));
-                                } else if (exportMode == 'designtemplate' && sheet.description.match(/\{.*?\}/)) {
-                                    keepSheetIds.push(sheet.engineObjectId);
-                                    $('#prvSheetList').append(tableRow.replace('{{§}}', sheet.description.match(/\{.*?\}/)[0]));
+                                sheets.forEach(function (sheet) {
+                                    const sheetUrl = baseUrl + 'sense/app/' + qlik.currApp().id + '/sheet/';
+                                    const tableRow = '<tr><td><a href="' + sheetUrl + sheet.engineObjectId + '" target="_blank">'
+                                        + sheet.name + '</a></td>'
+                                        + '<td>{{§}}</td></tr>';
+                                    if (sheet.description.indexOf('{public}') > -1) {
+                                        keepSheetIds.push(sheet.engineObjectId);
+                                        $('#prvSheetList').append(tableRow.replace('{§}', 'public'));
+                                    } else if (exportMode == 'onecustomer' && sheet.description.indexOf('{' + forCustomer + '}') > -1) {
+                                        keepSheetIds.push(sheet.engineObjectId);
+                                        $('#prvSheetList').append(tableRow.replace('{§}', forCustomer));
+                                    } else if (exportMode == 'designtemplate' && sheet.description.match(/\{.*?\}/)) {
+                                        keepSheetIds.push(sheet.engineObjectId);
+                                        $('#prvSheetList').append(tableRow.replace('{{§}}', sheet.description.match(/\{.*?\}/)[0]));
+                                    }
+                                });
+                                if (keepSheetIds.length == 0) {
+                                    $('#msgparent_' + ownId + 'dia').remove();
+                                    functions.leonardoMsg(ownId + 'err', 'Error',
+                                        'No sheets found for this customer. Add private tags {' + forCustomer
+                                        + '} or {public} tags to sheet descriptions and refresh',
+                                        null, 'Cancel', true);
+                                } else {
+                                    $('#gca_sheetcounter').text(keepSheetIds.length);
+
+                                    // what to do on click onto "OK"
+                                    $('#msgok_' + ownId + 'dia').text('Start');
+                                    $('#msgok_' + ownId + 'dia').on('click', function () {
+                                        const exportMode2 = $('input[name=myradio]:checked', '#gca_exportmode').val();
+                                        $('#msgparent_' + ownId + 'dia').remove();
+                                        functions.exportOrReloadApp(layout, qlik.currApp().id, newAppTitle,
+                                            exportMode == 'designtemplate' ? 'exportEmpty' : exportMode2,
+                                            baseUrl, keepSheetIds);
+                                    });
                                 }
                             });
-                            if (keepSheetIds.length == 0) {
-                                $('#msgparent_' + ownId + 'dia').remove();
-                                functions.leonardoMsg(ownId + 'err', 'Error',
-                                    'No sheets found for this customer. Add private tags {' + forCustomer
-                                    + '} or {public} tags to sheet descriptions and refresh',
-                                    null, 'Cancel', true);
-                            } else {
-                                $('#gca_sheetcounter').text(keepSheetIds.length);
-
-                                // what to do on click onto "OK"
-                                $('#msgok_' + ownId + 'dia').text('Start');
-                                $('#msgok_' + ownId + 'dia').on('click', function () {
-                                    const exportMode2 = $('input[name=myradio]:checked', '#gca_exportmode').val();
-                                    $('#msgparent_' + ownId + 'dia').remove();
-                                    functions.exportOrReloadApp(layout, qlik.currApp().id, newAppTitle,
-                                        exportMode == 'designtemplate' ? 'exportEmpty' : exportMode2,
-                                        baseUrl, keepSheetIds);
-                                });
-                            }
-                        });
-                    }
-                });
-
+                        }
+                    });
+                }
             }
 
             return qlik.Promise.resolve();
