@@ -153,7 +153,8 @@ define(['./functions'], function (functions) {
             }, {
                 label: 'Url GCA Hub SIT',
                 type: 'string',
-                defaultValue: 'https://ci-reporting-dev-myzurich.zurich.com/okta/extensions/databridge/hub.html?from=file&importdesign&importscript&stream=ad61b9f3-6c46-4669-be59-4b4718badc17',
+                defaultValue: atob('aHR0cHM6Ly9jaS1yZXBvcnRpbmctZGV2LW15enVyaWNoLnp1cmljaC5jb20=') 
+					+ '/okta/extensions/databridge/hub.html?from=file&importdesign&importscript&stream=ad61b9f3-6c46-4669-be59-4b4718badc17',
                 ref: 'pHubSIT'
             }, {
                 label: 'Test url',
@@ -162,7 +163,8 @@ define(['./functions'], function (functions) {
             }, {
                 label: 'Url GCA Hub UAT',
                 type: 'string',
-                defaultValue: 'https://ci-reporting-uat-myzurich.zurich.com/okta/extensions/databridge/hub.html?from=file&importdesign&importscript&stream=48f57b12-7ffa-4fe5-b518-fa94a78d4325',
+                defaultValue: atob('aHR0cHM6Ly9jaS1yZXBvcnRpbmctdWF0LW15enVyaWNoLnp1cmljaC5jb20=') 
+					+ '/okta/extensions/databridge/hub.html?from=file&importdesign&importscript&stream=48f57b12-7ffa-4fe5-b518-fa94a78d4325',
                 ref: 'pHubUAT'
             }, {
                 label: 'Test url',
@@ -171,7 +173,8 @@ define(['./functions'], function (functions) {
             }, {
                 label: 'Url GCA Hub Prod',
                 type: 'string',
-                defaultValue: 'https://ci-reporting-myzurich.zurich.com/okta/extensions/databridge/hub.html?from=file&importdesign&importscript&stream=41388fe6-bdbb-4b22-8188-0517efe19559',
+                defaultValue: atob('aHR0cHM6Ly9jaS1yZXBvcnRpbmctbXl6dXJpY2guenVyaWNoLmNvbQ==')
+					+ '/okta/extensions/databridge/hub.html?from=file&importdesign&importscript&stream=41388fe6-bdbb-4b22-8188-0517efe19559',
                 ref: 'pHubProd'
             }, {
                 label: 'Test url',
