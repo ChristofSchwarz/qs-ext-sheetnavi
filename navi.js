@@ -24,9 +24,8 @@ define(['jquery'], function ($) {
         subMenus.forEach(function (subMenu) {
             subMenu.style.display = 'none';
             const spanSel = '#' + subMenu.id.replace('subMenu', '') + ' span';
-            try {
-                document.querySelector(spanSel).classList.remove('rotate180');
-            } catch (err) { }
+            $('#' + subMenu.id.replace('subMenu', '') + ' span').removeClass('rotate180');
+            // document.querySelector(spanSel).classList.remove('rotate180');
         });
 
         var pos = document.getElementById(divId).parentElement.getBoundingClientRect();
@@ -38,7 +37,8 @@ define(['jquery'], function ($) {
         subMenu.style.width = maxWidth /*pos.width*/ + "px";
         subMenu.style.height = effectiveHeight + "px";
         subMenu.style.display = "block";
-        document.querySelector('#' + divId + ' span').classList.add('rotate180');
+        // document.querySelector('#' + divId + ' span').classList.add('rotate180');
+        $('#' + divId + ' span').addClass('rotate180');
     }
 
     //-------------------------------------------------------------------------------------
@@ -121,11 +121,9 @@ define(['jquery'], function ($) {
     function hideSubmenu(divId, e) {
         console.log('hiding subMenu ' + divId, e);
         document.getElementById(divId + 'subMenu').style.display = "none";
-        //document.querySelector('#' + divId + ' span').classList.remove('lui-icon--arrow-up');
-        document.querySelector('#' + divId + ' span').classList.remove('rotate180');
-        //document.querySelector('#' + divId + ' span').classList.add('lui-icon--arrow-down');
-        //const e = document.getElementById("subMenu"+divId);
-        //if (e) e.parentElement.removeChild(e);
+        
+        //document.querySelector('#' + divId + ' span').classList.remove('rotate180');
+        $('#' + divId + ' span').removeClass('rotate180');
     }
 
     //-------------------------------------------------------------------------------------
