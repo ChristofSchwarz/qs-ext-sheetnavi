@@ -39,7 +39,12 @@ define([], function () {
                 qInfo: { qType: "SheetList" },
                 qAppObjectListDef: {
                     qType: "sheet",
-                    qData: { title: "/qMetaDef/title", rank: "/rank" }
+                    qData: { 
+						title: "/qMetaDef/title", 
+						rank: "/rank",
+						labelExpression: "/labelExpression/qStringExpression/qExpr",
+                        showCondition: "/showCondition",
+					}
                 }
             });
             var allSheets = await sessObj.getLayout()
@@ -50,8 +55,11 @@ define([], function () {
                 return 0;
             });
             //console.log(allSheets.qAppObjectList.qItems);
-
-            allSheets.qAppObjectList.qItems.forEach(function (shLayout, i) {
+            // filter sheets that have a negative showCondition ("Sheet Security")
+            const visibleSheets = allSheets.qAppObjectList.qItems.filter(e => 
+				e.qData.showCondition != "0" || e.qData.showCondition == ""
+			);
+            visibleSheets.forEach(function (shLayout, i) {
                 var sheetTitle = shLayout.qMeta.title;
                 sheetList.push("Dual('" + sheetTitle.replace(/'/g, "'&chr(39)&'") + "'," + i + ")");
                 sheetMatrix[sheetTitle] = { tags: [] };
