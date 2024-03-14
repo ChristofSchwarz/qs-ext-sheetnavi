@@ -21,7 +21,7 @@ define(['jquery'], function ($) {
     function showSubmenu(divId) {
         // hide all other possibly open submenus first
         const subMenus = document.getElementsByClassName("absoluteSubMenu");
-        subMenus.forEach(function (subMenu) {
+        Array.from(subMenus).forEach(function (subMenu) {
             subMenu.style.display = 'none';
             const spanSel = '#' + subMenu.id.replace('subMenu', '') + ' span';
             $('#' + subMenu.id.replace('subMenu', '') + ' span').removeClass('rotate180');

@@ -355,6 +355,11 @@ define([], function () {
             '  </div>';
         node.innerHTML = html;
         document.getElementById("qs-page-container").append(node);
+		// correction of height (in newer CSS of Qlik Sense client)
+		const currTop = $('#msgparent_' + ownId + ' .lui-dialog').css('top').replace('px','') * 1;
+		const topOffset = currTop - $('#msgparent_' + ownId + ' .lui-dialog').position().top;
+		$('#msgparent_' + ownId + ' .lui-dialog').css('top', (currTop + topOffset) + 'px');
+
     };
 
 

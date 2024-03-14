@@ -172,10 +172,20 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
                 $('.gca_extrabutton').remove();
 
                 if (layout.pShowZurichBtn) {
+				
                     // --- append button to Qlik Sense Client menu ---
-                    $('.qs-toolbar__right').prepend(
+					var newQlikCSS = true;
+					var selector = '[data-testid="qs-sub-toolbar__right"]'; // new Qlik CSS design
+					if ($('.qs-toolbar__right').length) {
+						newQlikCSS = false;
+						selector = '.qs-toolbar__right'; // old Qlik cSS design
+					}
+					
+                    $(selector).prepend(
                         '<div class="qs-popover-container  qs-toolbar__element  gca_extrabutton">'
-                        + '<button id="' + ownId + 'menu" type="button" class="lui-button" title="GCA Export" style="background-color:#062C92;color:white;">'
+                        + '<button id="' + ownId + 'menu" type="button" ' 
+						+ (newQlikCSS ? '' : ' class="lui-button"') 
+						+ ' title="GCA Export" style="background-color:#062C92;color:white;' + (newQlikCSS ? 'height:100%;width:28px;' : '') + '">'
                         + '<span class="lui-icon lui-icon--export qs-no-margin" aria-hidden="true"></span>'
                         + '</button></div>'
                     );
