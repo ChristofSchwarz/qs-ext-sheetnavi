@@ -74,7 +74,7 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
 
             //const fontColorInactive = '#bbb';
             var ownId = layout.qInfo.qId;
-            console.log('layout', layout);
+
             var app = qlik.currApp(this);
             var enigma = app.model.enigmaModel;
             const singleMode = (location.href.indexOf('/single') > -1);
@@ -83,22 +83,35 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
             if (currSheetId.substr(0, 1) == '=') currSheetId = currSheetId.substr(1).split('&')[0];
             //const highlightedMenu = 'background-color:' + layout.pHighlightBgCol.color + ';'
             //    + 'color:' + layout.pHighlightTxtCol.color + ';';
+            
+            var layoutDefaults = {  // compatibility with objects created with earlier verion of SheetNavi
+                pLineCol: { color: '#dedede' },
+                pTwistieCol: { color: '#3882ff' },
+                pMenuBgCol: { color: 'white' },
+                pMenuTxtCol: { color: '#333'}, 
+                pAlignment: 'h',
+                pFontsize: 10,
+                pShowZurichBtn: location.href.indexOf('zurich.com/') > -1,
+                qHyperCube: { qDimensionInfo: { length: 0 } }
+            }
+            var layout2 = { ...layoutDefaults, ...layout };
+            console.log('layout2', layout2);
 
             var html = '<nav class="sheetnavi sheetnavi-stroke"'
-                + (layout.pAlignment == 'v' ? '' : (' style="border-bottom: 1px solid ' + layout.pLineCol.color + ';"'))
+                + (layout2.pAlignment == 'v' ? '' : (' style="border-bottom: 1px solid ' + layout2.pLineCol.color + ';"'))
                 + ' role="navigation">'
-                + '  <ul id="' + ownId + '_ul" class="sheetnavi_' + layout.pAlignment + '" style="font-size:' + layout.pFontsize + 'pt;">'
+                + '  <ul id="' + ownId + '_ul" class="sheetnavi_' + layout2.pAlignment + '" style="font-size:' + layout2.pFontsize + 'pt;">'
                 + '    <li>&nbsp;</li>'
                 + '  </ul>'
                 + '</nav>';
             $element.html(html);
             // add vertical scrollbars if more size is needed vertically
-            if (layout.pAlignment == 'v') $('#' + ownId + '_ul').parent().parent().css('overflow-y', 'auto');
+            if (layout2.pAlignment == 'v') $('#' + ownId + '_ul').parent().parent().css('overflow-y', 'auto');
 
             // set background for Qlik Sense Client object
-            $('[tid="' + ownId + '"] .qv-inner-object').css('background-color', layout.pMenuBgCol.color);
+            $('[tid="' + ownId + '"] .qv-inner-object').css('background-color', layout2.pMenuBgCol.color);
             // set background for /single mode
-            $('[data-qid="' + ownId + '"] .qv-object-wrapper').css('background-color', layout.pMenuBgCol.color);
+            $('[data-qid="' + ownId + '"] .qv-object-wrapper').css('background-color', layout2.pMenuBgCol.color);
 
             // var menuEntries = [];
             var menuTree = [];
@@ -114,11 +127,11 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
                 // if the sheetNaviInfo was created and put into DOM before, just re-render it
                 menuTree = JSON.parse($('#sheetNaviTree').html().split('<!--')[1].split('-->')[0]);
                 //navi.destroyAllSubmenus();
-                await navi.renderMenu(menuTree, ownId, singleMode, enigma, currSheetId, layout, qlik, settings);
-                await navi.highlightCurrSheet(ownId, currSheetId, menuTree, layout);
+                await navi.renderMenu(menuTree, ownId, singleMode, enigma, currSheetId, layout2, qlik, settings);
+                await navi.highlightCurrSheet(ownId, currSheetId, menuTree, layout2);
 
             } else {
-                var ret = await functions.readSheetDescr(enigma, layout, app);
+                var ret = await functions.readSheetDescr(enigma, layout2, app);
                 sheetMatrix = ret.sheetMatrix;
                 sheetList = ret.sheetList;
                 tagList = ret.tagList;
@@ -133,8 +146,8 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
 
                     // add the menuTree to the DOM model as comment for faster rendering next time
                     $('body').append('<div id="sheetNaviTree"><!--' + JSON.stringify(menuTree) + '--></div>');
-                    await navi.renderMenu(menuTree, ownId, singleMode, enigma, currSheetId, layout, qlik, settings);
-                    await navi.highlightCurrSheet(ownId, currSheetId, menuTree, layout);
+                    await navi.renderMenu(menuTree, ownId, singleMode, enigma, currSheetId, layout2, qlik, settings);
+                    await navi.highlightCurrSheet(ownId, currSheetId, menuTree, layout2);
                 }
             }
 
@@ -149,7 +162,7 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
                 // Client is in normal Qlik Sense mode /sense/app ....
 
                 // Register on-click Navigation events (no hyperlinks)
-                layout.listItems.forEach(function (listItem, i) {
+                layout2.listItems.forEach(function (listItem, i) {
                     if (listItem.sheetid != currSheetId) {
                         $element.find("#link_" + listItem.sheetid).on("click", function () {
                             qlik.navigation.gotoSheet(listItem.sheetid);
@@ -159,7 +172,7 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
 
                 // hide or unhide the Sheet Name (to mimik the same look as in /single mode)
 
-                if (layout.pHideTitle) {
+                if (layout2.pHideTitle) {
                     document.getElementsByClassName('sheet-title-container')[0].style.display = 'none';
                 } else {
                     if (document.getElementsByClassName('sheet-title-container')[0].style.removeProperty) {
@@ -171,21 +184,21 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
 
                 $('.gca_extrabutton').remove();
 
-                if (layout.pShowZurichBtn) {
-				
+                if (layout2.pShowZurichBtn) {
+
                     // --- append button to Qlik Sense Client menu ---
-					var newQlikCSS = true;
-					var selector = '[data-testid="qs-sub-toolbar__right"]'; // new Qlik CSS design
-					if ($('.qs-toolbar__right').length) {
-						newQlikCSS = false;
-						selector = '.qs-toolbar__right'; // old Qlik cSS design
-					}
-					
+                    var newQlikCSS = true;
+                    var selector = '[data-testid="qs-sub-toolbar__right"]'; // new Qlik CSS design
+                    if ($('.qs-toolbar__right').length) {
+                        newQlikCSS = false;
+                        selector = '.qs-toolbar__right'; // old Qlik cSS design
+                    }
+
                     $(selector).prepend(
                         '<div class="qs-popover-container  qs-toolbar__element  gca_extrabutton">'
-                        + '<button id="' + ownId + 'menu" type="button" ' 
-						+ (newQlikCSS ? '' : ' class="lui-button"') 
-						+ ' title="GCA Export" style="background-color:#062C92;color:white;' + (newQlikCSS ? 'height:100%;width:28px;' : '') + '">'
+                        + '<button id="' + ownId + 'menu" type="button" '
+                        + (newQlikCSS ? '' : ' class="lui-button"')
+                        + ' title="GCA Export" style="background-color:#062C92;color:white;' + (newQlikCSS ? 'height:100%;width:28px;' : '') + '">'
                         + '<span class="lui-icon lui-icon--export qs-no-margin" aria-hidden="true"></span>'
                         + '</button></div>'
                     );
@@ -194,7 +207,7 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
                         var menu = $.ajax({ type: "GET", url: "../extensions/sheetnavi/menu.html", async: false });
                         menu = menu.responseText;
 
-                        var ret = await functions.readSheetDescr(enigma, layout, app);
+                        var ret = await functions.readSheetDescr(enigma, layout2, app);
                         console.log('readSheetDescr came back with', ret);
                         sheetMatrix = ret.sheetMatrix;
                         sheetList = ret.sheetList;
@@ -254,7 +267,7 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
                                 if (tag != 'public')
                                     $('#gca_datalist').append('<option>' + tag + '</option>');
                             });
-                            layout.pMoreCustomers.split(',').forEach(function (tag) {
+                            layout2.pMoreCustomers.split(',').forEach(function (tag) {
                                 if (tag.trim() != '')
                                     $('#gca_datalist').append('<option>' + tag.trim() + '</option>');
                             });
@@ -313,7 +326,7 @@ define(["qlik", "./settings", "./props", "./navi", "./functions", "text!./styles
                                     $('#msgok_' + ownId + 'dia').on('click', function () {
                                         const exportMode2 = $('input[name=myradio]:checked', '#gca_exportmode').val();
                                         $('#msgparent_' + ownId + 'dia').remove();
-                                        functions.exportOrReloadApp(layout, qlik.currApp().id, newAppTitle,
+                                        functions.exportOrReloadApp(layout2, qlik.currApp().id, newAppTitle,
                                             exportMode == 'designtemplate' ? 'exportEmpty' : exportMode2,
                                             baseUrl, keepSheetIds);
                                     });
